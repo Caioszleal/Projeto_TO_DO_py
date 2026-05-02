@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>📋Minha Lista📋</h1>
+
+    <form action="/add" method="POST">
+        <input type="text" name="task" placeholder="Digite uma tarefa..." required>
+        <input type="date" name="deadline">
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li class="
+                {% if task.done %}done{% endif %}
+                {% if task.overdue %}overdue{% endif %}
+            ">
+            
+                <div>
+                    <span>{{ task.title }}</span><br>
+                    {% if task.deadline %}
+                        <small>Prazo: {{ task.deadline }}</small>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {% if not task.done %}
+                        <a href="/done/{{ task.id }}">✔</a>
+                    {% endif %}
+
+                    <a href="/delete/{{ task.id }}">🗑</a>
+                </div>
+
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+    
+</body>
+</html>
