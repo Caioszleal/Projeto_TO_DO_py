@@ -32,10 +32,11 @@
 
                 <div>
                     {% if not task.done %}
-                        <a href="/done/{{ task.id }}">✔</a>
+                        <a href="{{ url_for('done', id=task.id) }}">✔</a>
                     {% endif %}
 
-                    <a href="/delete/{{ task.id }}">🗑</a>
+                    <a href="{{ url_for('edit', id=task.id) }}">✏️</a>
+                    <a href="{{ url_for('delete', id=task.id) }}">🗑</a>
                 </div>
 
             </li>

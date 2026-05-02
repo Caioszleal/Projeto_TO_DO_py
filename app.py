@@ -59,10 +59,32 @@ def delete(id):
 
     return redirect("/")
 
+@app.route("/edit/<int:id>")
+def edit(id):
+    db = get_db()
+    task = db.execute("SELECT * FROM tasks WHERE id = ?", (id,)).fetchone()
+
+    return render_template("edit.html", task=task)
+
 @app.route("/done/<int:id>")
 def done(id):
     db = get_db()
     db.execute("UPDATE tasks SET done = 1 WHERE id = ?", (id,))
+    db.commit()
+
+    return redirect("/")
+
+
+@app.route("/update/<int:id>", methods=["POST"])
+def update(id):
+    title = request.form["task"]
+    deadline = request.form["deadline"]
+
+    db = get_db()
+    db.execute(
+        "UPDATE tasks SET title = ?, deadline = ? WHERE id = ?",
+        (title, deadline, id)
+    )
     db.commit()
 
     return redirect("/")
