@@ -3,46 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>To-Do App</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div class="container">
-    <h1>📋Minha Lista📋</h1>
 
+    <!-- BOTÃO DARK MODE -->
+    <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+
+    <h1>📝 Minha Lista</h1>
+
+    <!-- FILTROS -->
+    <div class="filtros">
+        <a href="/?filtro=todas" class="{% if filtro == 'todas' %}ativo{% endif %}">Todas</a>
+        <a href="/?filtro=pendentes" class="{% if filtro == 'pendentes' %}ativo{% endif %}">Pendentes</a>
+        <a href="/?filtro=concluidas" class="{% if filtro == 'concluidas' %}ativo{% endif %}">Concluídas</a>
+        <a href="/?filtro=atrasadas" class="{% if filtro == 'atrasadas' %}ativo{% endif %}">Atrasadas</a>
+    </div>
+
+    <!-- FORMULÁRIO -->
     <form action="/add" method="POST">
         <input type="text" name="task" placeholder="Digite uma tarefa..." required>
         <input type="date" name="deadline">
         <button type="submit">Adicionar</button>
     </form>
 
+    <!-- LISTA DE TAREFAS -->
     <ul>
         {% for task in tasks %}
             <li class="
                 {% if task.done %}done{% endif %}
                 {% if task.overdue %}overdue{% endif %}
             ">
-            
+
                 <div>
-                    <span>{{ task.title }}</span><br>
+                    <span>{{ task.title }}</span>
+                    
                     {% if task.deadline %}
                         <small>Prazo: {{ task.deadline }}</small>
                     {% endif %}
                 </div>
 
-                <div>
+                <div class="actions">
                     {% if not task.done %}
-                        <a href="{{ url_for('done', id=task.id) }}">✔</a>
+                        <a href="/done/{{ task.id }}">✔</a>
                     {% endif %}
 
-                    <a href="{{ url_for('edit', id=task.id) }}">✏️</a>
-                    <a href="{{ url_for('delete', id=task.id) }}">🗑</a>
+                    <a href="/edit/{{ task.id }}">✏️</a>
+                    <a href="/delete/{{ task.id }}">🗑</a>
                 </div>
 
             </li>
         {% endfor %}
     </ul>
+
 </div>
-    
+
+<!-- SCRIPT DARK MODE -->
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+}
+
+window.onload = function() {
+    const theme = localStorage.getItem("theme");
+    if (theme === "dark") {
+        document.body.classList.add("dark");
+    }
+}
+</script>
+
 </body>
 </html>

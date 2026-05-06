@@ -9,31 +9,43 @@ def get_db():
 
 @app.route('/')
 def index():
+    filtro = request.args.get("filtro", "todas")
+
+
     db = get_db()
     tasks = db.execute("SELECT * FROM tasks").fetchall()
 
     today = date.today()
-
-    tasks_with_status = []
+    tasks_filtradas = []
 
     for task in tasks:
         deadline = task[3]
+        done = task[2]
 
         overdue = False
 
         if deadline:
             task_date = date.fromisoformat(deadline)
-            if task_date < today and task[2] == 0:
+            if task_date < today and done == 0:
                 overdue = True
 
-        tasks_with_status.append({
+        #lógica de filtro
+        if filtro == "pendentes" and done:
+            continue
+        elif filtro == "concluídas" and not done:
+            continue
+        elif filtro == "atrasadas" and not overdue:
+            continue
+
+
+        tasks_filtradas.append({
             "id": task[0],
             "title": task[1],
-            "done": task[2],
+            "done": done,
             "deadline": deadline,
             "overdue": overdue,
         })
-    return render_template("index.html", tasks=tasks_with_status)
+    return render_template("index.html", tasks=tasks_filtradas, filtro=filtro)
 
 @app.route("/add", methods=["POST"])
 def add():
