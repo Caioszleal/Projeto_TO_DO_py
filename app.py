@@ -10,6 +10,7 @@ def get_db():
 @app.route('/')
 def index():
     filtro = request.args.get("filtro", "todas")
+    busca = request.args.get("busca", "").lower()
 
 
     db = get_db()
@@ -21,6 +22,10 @@ def index():
     for task in tasks:
         deadline = task[3]
         done = task[2]
+        title = task[1].lower()
+
+        if busca and busca not in title:
+            continue
 
         overdue = False
 
@@ -45,7 +50,25 @@ def index():
             "deadline": deadline,
             "overdue": overdue,
         })
-    return render_template("index.html", tasks=tasks_filtradas, filtro=filtro)
+
+    total = len(tasks_filtradas)
+
+    pendentes = len([task for task in tasks_filtradas if not task["done"]])
+
+    concluidas = len([task for task in tasks_filtradas if task["done"]])
+
+    atrasadas = len([task for task in tasks_filtradas if task["overdue"]])
+
+    return render_template(
+        "index.html",
+        tasks=tasks_filtradas,
+        filtro=filtro,
+        busca=busca,
+        total=total,
+        pendentes=pendentes,
+        concluidas=concluidas,
+        atrasadas=atrasadas
+    )
 
 @app.route("/add", methods=["POST"])
 def add():

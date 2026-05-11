@@ -152,6 +152,40 @@ small {
     color: white !important;
 }
 
+.busca-form {
+    margin-bottom: 15px;
+}
+
+.busca-form input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ===== CONTADORES ===== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.card {
+    background: var(--task);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card strong {
+    display: block;
+    font-size: 20px;
+}
+
+.card span {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
 /* ===== LINK VOLTAR ===== */
 a {
     color: var(--text);

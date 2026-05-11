@@ -3,6 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>To-Do App</title>
+    <div class="stats">
+        <div class="card">
+            <strong>{{ total }}</strong>
+            <span>Total</span>
+        </div>
+
+        <div class="card">
+            <strong>{{ pendentes }}</strong>
+            <span>Pendentes</span>
+        </div>
+
+        <div class="card">
+            <strong>{{ concluidas }}</strong>
+            <span>Concluídas</span>
+        </div>
+
+        <div class="card">
+            <strong>{{ atrasadas }}</strong>
+            <span>Atrasadas</span>
+        </div>
+
+    </div>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -13,6 +35,16 @@
     <button class="theme-btn" onclick="toggleTheme()">🌓</button>
 
     <h1>📝 Minha Lista</h1>
+
+    <!-- BUSCA -->
+     <form method="GET" class="busca-form">
+        <input 
+            type="text"
+            name="busca"
+            placeholder="🔍 Buscar tarefa..."
+            value="{{ busca }}"
+        >
+     </form>
 
     <!-- FILTROS -->
     <div class="filtros">
